@@ -1,0 +1,11 @@
+*.csv
+*.shp
+*.cpg
+*.dbf
+*.xml
+*.prj
+*.shx
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
