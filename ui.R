@@ -6,7 +6,10 @@
 #
 
 library(shiny)
+library(readr)
+library(leaflet)
 
+df <- read_csv(here::here('census_data.csv'))
 shinyUI(fluidPage(
 
   # Application title
@@ -17,7 +20,7 @@ shinyUI(fluidPage(
     sidebarPanel(
       selectInput('language',
                   label = h3("Select a Language"),
-                  choices = language_list,
+                  choices = unique(df$Language),
                   selected = 'Russian'
                   )
 
@@ -25,7 +28,7 @@ shinyUI(fluidPage(
 
     # Show a plot of the generated distribution
     mainPanel(
-      plotOutput("mymap")
+       leafletOutput('map')
     )
   )
 ))
