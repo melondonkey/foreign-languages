@@ -28,7 +28,7 @@ shinyUI(fluidPage(
 
     # Show a plot of the generated distribution
     mainPanel(
-       leafletOutput('map')
+       leafletOutput('map', width = "500px", height = "1000px")
     )
   )
 ))
