@@ -39,37 +39,39 @@ shinyServer(function(input, output) {
   
   lang_poly <- reactive({
     subset(mapped, ZCTA5CE10 %in% mylang()$Zip)
-    
-    
-    
+
     #mylang <- mylang[order(match(mylang$Zip, mapped@data$ZCTA5CE10)), ] #match the sort order in the polygon
+  })
+  
+  mylang2 <- reactive({
+    mylang()[order(match(mylang()$Zip, lang_poly()@data$ZCTA5CE10)), ]
   })
   
   
   output$map <- renderLeaflet({
     leaflet() %>%
       addProviderTiles('OpenStreetMap.BlackAndWhite') %>%  # Esri.WorldGrayCanvas
-      setView(lng = start_loc[1], lat = start_loc[2], zoom = 10) 
+      setView(lng = start_loc[1], lat = start_loc[2], zoom = 9) 
       
       
   })
   
   colorpal <- reactive({
     colorQuantile(palette = "viridis", 
-                  domain = mylang$`Estimate Total`, 
+                  domain = mylang()$`Estimate Total`, 
                   probs = c(0,.5, .75, .9, .95, .99, 1), 
                   reverse = TRUE)
   })
     
   
   observe({
-    pal <- colorpal
+    pal <- colorpal()
     
     leafletProxy("map") %>%
       addPolygons(data = lang_poly(),
         stroke = FALSE,
         fillOpacity = .5,
-    #     fillColor = ~pal(mylang$`Estimate Total`),
+         fillColor = ~pal(mylang2()$`Estimate Total`),
         #   popup = mylang$Zip_string,
         popupOptions = NULL,
         #  label = mylabel,
