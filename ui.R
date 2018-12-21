@@ -1,15 +1,5 @@
 
-# This is the user-interface definition of a Shiny web application.
-# You can find out more about building applications with Shiny here:
-#
-# http://shiny.rstudio.com
-#
 
-library(shiny)
-library(readr)
-library(leaflet)
-
-df <- read_csv(here::here('census_data.csv'))
 shinyUI(fluidPage(
 
   # Application title
