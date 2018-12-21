@@ -2,6 +2,16 @@
 
 shinyServer(function(input, output) {
   
+  mylong <- reactive({
+     geocode(input$location, source="dsk")[1]
+ 
+  })  
+  
+  mylat <- reactive({
+    geocode(input$location, source="dsk")[2]
+    
+  })
+
   mylang <- reactive({
     df %>% 
       filter(Language==input$language) %>% #Choose language here!
@@ -24,7 +34,12 @@ shinyServer(function(input, output) {
   output$map <- renderLeaflet({
     leaflet() %>%
       addProviderTiles('OpenStreetMap.BlackAndWhite') %>%  # Esri.WorldGrayCanvas
-      setView(lng = start_loc[1], lat = start_loc[2], zoom = 9) 
+      setView(
+        #lng = start_loc[1], 
+        #lat = start_loc[2], 
+        lng =  mylong(),
+        lat =  mylat(),
+        zoom = 9) 
       
       
   })
@@ -44,7 +59,7 @@ shinyServer(function(input, output) {
       addPolygons(data = lang_poly(),
         stroke = FALSE,
         fillOpacity = .5,
-         fillColor = ~pal(mylang2()$`Estimate Total`),
+        fillColor = ~pal(mylang2()$`Estimate Total`),
         #   popup = mylang$Zip_string,
         popupOptions = NULL,
         #  label = mylabel,
