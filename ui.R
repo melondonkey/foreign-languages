@@ -9,16 +9,22 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       selectInput('language',
-                  label = h3("Select a Language"),
+                  label = "Select a Language",
                   choices = unique(df$Language),
                   selected = 'Russian'
-                  )
+                  ),
+      textInput(
+        'location',
+        'Type your location',
+        'Atlanta, GA'
+      ),
+    submitButton(text = "Apply Changes", icon = NULL, width = NULL)
 
     ),
 
     # Show a plot of the generated distribution
     mainPanel(
-       leafletOutput('map', width = "500px", height = "1000px")
+       leafletOutput('map')
     )
   )
 ))
