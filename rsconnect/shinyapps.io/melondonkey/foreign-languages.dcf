@@ -5,9 +5,9 @@ account: melondonkey
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 564081
-bundleId: 1694020
+bundleId: 1778280
 url: https://melondonkey.shinyapps.io/foreign-languages/
-when: 1541910363.10733
+when: 1545408940.95521
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: play.R|side-plots.R

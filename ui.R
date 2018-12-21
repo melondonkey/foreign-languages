@@ -16,7 +16,7 @@ shinyUI(fluidPage(
       textInput(
         'location',
         'Type your location',
-        'Atlanta, GA'
+        'atlanta ga'
       ),
     submitButton(text = "Apply Changes", icon = NULL, width = NULL)
 
@@ -24,7 +24,10 @@ shinyUI(fluidPage(
 
     # Show a plot of the generated distribution
     mainPanel(
-       leafletOutput('map')
+      tabsetPanel(
+       tabPanel("Map", leafletOutput('map') ),
+       tabPanel("Summary Chart", plotlyOutput('summaryPlot'))
+      )
     )
   )
 ))

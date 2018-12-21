@@ -32,16 +32,29 @@ shinyServer(function(input, output) {
   
   
   output$map <- renderLeaflet({
+    pal <- colorpal()
+    
     leaflet() %>%
-      addProviderTiles('OpenStreetMap.BlackAndWhite') %>%  # Esri.WorldGrayCanvas
+         
       setView(
         #lng = start_loc[1], 
         #lat = start_loc[2], 
         lng =  mylong(),
         lat =  mylat(),
-        zoom = 9) 
-      
-      
+        zoom = 9
+        )  %>%
+      addProviderTiles('OpenStreetMap.BlackAndWhite') %>%
+      addPolygons(data = lang_poly(),
+                  stroke = FALSE,
+                  fillOpacity = .5,
+                  fillColor = ~pal(mylang2()$`Estimate Total`),
+                  #   popup = mylang$Zip_string,
+                  popupOptions = NULL,
+                  #  label = mylabel,
+                  labelOptions = NULL,
+                  options = pathOptions(),
+                  highlightOptions = NULL
+      )
   })
   
   colorpal <- reactive({
@@ -50,29 +63,23 @@ shinyServer(function(input, output) {
                   probs = c(0,.5, .75, .9, .95, .99, 1), 
                   reverse = TRUE)
   })
+  
+  output$summaryPlot <- renderPlotly({
+    mylang() %>% group_by(`City State`) %>%
+      summarize(ttl = sum(`Estimate Total`)) %>%
+      filter(!is.na(`City State`)) %>%
+      arrange(-ttl) %>%
+      top_n(25) %>%
+      ggplot(aes(x = reorder(`City State`, ttl), y = ttl)) + geom_bar(stat = 'identity') +
+      coord_flip() +
+      xlab("City") +
+      ylab("# Speakers") +
+      scale_y_continuous(labels = scales::comma) +
+      ggtitle("Top 25 Metro Areas for this Language")
+  })
     
   
-  observe({
-    pal <- colorpal()
-    
-    leafletProxy("map") %>%
-      addPolygons(data = lang_poly(),
-        stroke = FALSE,
-        fillOpacity = .5,
-        fillColor = ~pal(mylang2()$`Estimate Total`),
-        #   popup = mylang$Zip_string,
-        popupOptions = NULL,
-        #  label = mylabel,
-        labelOptions = NULL,
-        options = pathOptions(),
-        highlightOptions = NULL
-        
-        
-        
-      )
-      
-    
-  })
+ 
     
 }) 
     
