@@ -65,7 +65,7 @@ shinyServer(function(input, output) {
   })
   
   output$summaryPlot <- renderPlotly({
-    mylang() %>% group_by(`City State`) %>%
+   p<- mylang() %>% group_by(`City State`) %>%
       summarize(ttl = sum(`Estimate Total`)) %>%
       filter(!is.na(`City State`)) %>%
       arrange(-ttl) %>%
@@ -76,6 +76,8 @@ shinyServer(function(input, output) {
       ylab("# Speakers") +
       scale_y_continuous(labels = scales::comma) +
       ggtitle("Top 25 Metro Areas for this Language")
+   p <- ggplotly(p, tooltip = c('y'))
+   
   })
     
   
